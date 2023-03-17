@@ -1,0 +1,82 @@
+<div class="container-fluid">
+	<nav class="navbar navbar-expand-lg sticky-top justify-content-center">
+		<%= form_with url: home_search_path, method: :get, class: "d-flex" do %>
+			<%= text_field_tag :query,
+			                   params[:query],
+			                   class: "form-control",
+			                   placeholder: "Find a movie"
+			%>
+			<%= submit_tag "Search", class: "btn btn-primary" %>
+		<% end %>
+	</nav>
+	<%if @process %>
+		<div class="alert alert-primary" role="alert">
+			<%=@process %>
+		</div>
+	<%end %>
+	<%if !@movies.empty?%>
+		<div class="row justify-content-center">
+			<%if @movies["results"].empty? %>
+				<div class="row justify-content-center">
+					<div class="card col-6">
+						<h3>There is no match to "<%= @client.keyword %>"!</h3>
+						<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+							<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+						</svg>
+					</div>
+				</div>
+			<%end %>
+			<%@movies["results"].each_with_index do |movie, index|%>
+				<div class="col-3">
+					<div class="card">
+						<%=index + 1 %>.
+						<%=movie["title"][0..20] %> <br>
+						<%if movie["poster_path"]%>
+							<%= image_tag "https://image.tmdb.org/t/p/w500#{movie["poster_path"]}"%>
+						<%else %>
+							<%= image_tag 'photo.png'%>
+						<%end %>
+						<%=link_to "#", class: "btn btn-primary", data: {bs_toggle: "collapse", bs_target: "#Overview#{index}"} do%>
+							Details
+						<%end %>
+						<div class="collapse" id="Overview<%=index%>">
+							<div class="card card-body">
+								<div class="text-center">
+									<p>
+										Title <br>
+										<%=movie["title"]%>
+									</p>
+									<p>
+										Overview <br>
+										<%=movie["overview"]%>
+									</p>
+									<p>
+										Popularity <br>
+										<%=movie["popularity"]%>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+		<div class="text-center">
+		<!--Due to the special ability of the API call that sends back only 20 record at one call the app needs to use new calls with page number	to "collect" the hole result of the search-->
+			<%if !@movies["results"].empty?%>
+				<%(1..@movies["total_pages"].to_i).each do |num| %>
+					<%=link_to "#{num}",home_search_path(query: @client.keyword, page: num), class: "btn btn-secondary", style:"width: 40px; margin: 2px;"%>
+				<%end %>
+			<%end %>
+		</div>
+	<%else %>
+		<div class="row justify-content-center">
+			<div class="card col-6">
+				<h3>Find your favorite movie!</h3>
+				<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+					<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+				</svg>
+			</div>
+		</div>
+	<%end%>
+</div>

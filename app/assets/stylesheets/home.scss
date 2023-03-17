@@ -1,0 +1,36 @@
+.card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: darkgray;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: black;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  padding: 3px;
+  margin: 5px;
+  heigth: 180px;
+  .btn{
+    margin: 2px;
+  }
+}
+img{
+  height: 100px;
+  weight: 100px;
+}
+.navbar{
+  background-color: #0d6efd;
+  opacity: 0.9;
+  margin: 1px;
+  border-radius: 3px;
+  .btn{
+    border: 1px solid white;
+  }
+  .btn:hover{
+    background-color: #0d6efd;
+    opacity: 1;
+    border: 1px solid lightgray;
+    color: lightgray;
+  }
+}
